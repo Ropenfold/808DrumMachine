@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Drum Kit</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="keys">
+      <div data-key="65" class="key">
+        <kbd>A</kbd>
+        <span class="sound">Clap</span>
+      </div>
+      <div data-key="66" class="key">
+        <kbd>B</kbd>
+        <span class="sound">Bass Drum</span>
+      </div>
+      <div data-key="83" class="key">
+        <kbd>S</kbd>
+        <span class="sound">Open Hi Hat</span>
+      </div>
+      <div data-key="68" class="key">
+        <kbd>D</kbd>
+        <span class="sound">Claves</span>
+      </div>
+      <div data-key="70" class="key">
+        <kbd>F</kbd>
+        <span class="sound">Congas</span>
+      </div>
+      <div data-key="71" class="key">
+        <kbd>G</kbd>
+        <span class="sound">Tom Toms</span>
+      </div>
+      <div data-key="72" class="key">
+        <kbd>H</kbd>
+        <span class="sound">Rim Shot</span>
+      </div>
+      <div data-key="74" class="key">
+        <kbd>J</kbd>
+        <span class="sound">Snare</span>
+      </div>
+      <div data-key="75" class="key">
+        <kbd>K</kbd>
+        <span class="sound">Cymbal</span>
+      </div>
+      <div data-key="76" class="key">
+        <kbd>L</kbd>
+        <span class="sound">Cowbell</span>
+      </div>
+    </div>
+
+    <audio data-key="65" src="808sounds/808clap.wav"></audio>
+    <audio data-key="66" src="808sounds/808bass.wav"></audio>
+    <audio data-key="83" src="808sounds/808openhihat.wav"></audio>
+    <audio data-key="68" src="808sounds/808claves.wav"></audio>
+    <audio data-key="70" src="808sounds/808congas.wav"></audio>
+    <audio data-key="71" src="808sounds/808tomtoms.wav"></audio>
+    <audio data-key="72" src="808sounds/808rimshot.wav"></audio>
+    <audio data-key="74" src="808sounds/808snare.wav"></audio>
+    <audio data-key="75" src="808sounds/808cymbal.wav"></audio>
+    <audio data-key="76" src="808sounds/808cowbell.wav"></audio>
+
+    <script>
+      function removeTransition(e) {
+        // Skip if its not transform, transform was taken from
+        // the properties log
+        //skip if it is not a perform
+        if (e.propertyName !== "transform") return;
+        //transform
+        e.target.classList.remove("playing");
+      }
+
+      function playSound(e) {
+        //selects an audio key with a data type that matches the key that is pressed.
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        //adds animation on button when pressed
+        const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+
+        if (!audio) return;
+
+        //adds a key class "playing" to animate the button on press
+        key.classList.add("playing");
+        //Plays the track and rewinds to the start on each of audio file
+        audio.currentTime = 0;
+        audio.play();
+      }
+
+      //This is a transition end event and this listens to all of the keys to see if there is an event
+      const keys = Array.from(document.querySelectorAll(".key"));
+
+      //Adds event listener for all the keys and will run a function called transition end
+      keys.forEach(key =>
+        key.addEventListener("transitionend", removeTransition)
+      );
+
+      //creates the listener to allow for the keys to be pressed
+      window.addEventListener("keydown", playSound);
+    </script>
+  </body>
+</html>
